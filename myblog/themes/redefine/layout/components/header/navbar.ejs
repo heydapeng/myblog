@@ -4,7 +4,10 @@
             <% if (theme.defaults.hasOwnProperty('logo') && theme.defaults.logo) { %>
                 <a class="logo-image h-8 w-8 sm:w-10 sm:h-10 mr-3" href="<%= config.root %>">
                     <%- image_tag(theme.defaults.logo, {
-                        class: "w-full h-full rounded-xs"
+                        class: "w-full h-full rounded-xs",
+                        alt: theme.info.title || config.title,
+                        width: 40,
+                        height: 40
                     }) %>
                 </a>
             <% } %>
@@ -160,4 +163,3 @@
     <div class="window-mask"></div>
 
 </header>
-

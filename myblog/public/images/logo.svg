@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">DapengKernel — D 与内核</title>
+  <rect width="64" height="64" rx="16" fill="#142c3a"/>
+  <path d="M19 16h12c13 0 20 6 20 16s-7 16-20 16H19V16Zm8 7v18h4c8 0 13-3 13-9s-5-9-13-9h-4Z" fill="#f4f8fa"/>
+  <rect x="14" y="28" width="9" height="8" rx="2" fill="#5ed3ba"/>
+</svg>
