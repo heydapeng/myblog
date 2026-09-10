@@ -169,7 +169,7 @@
             <% } }%>
     <% } }%>
 
-    <%- css('css/style') %>
+    <link rel="stylesheet" href="<%- url_for('css/style.css') %>?v=<%- Date.now() %>">
 
     <% if (theme.developer && theme.developer.enable) {%>
         <%- css('css/build/tailwind.css') %>
