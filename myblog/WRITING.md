@@ -8,6 +8,12 @@ D:\Acodes\dapengblog2.0\myblog\WRITING.md
 ```
 
 `source/_posts` 是文章区，推荐直接用 Obsidian 或 Typora 打开这个目录写。`WRITING.md` 就是这份说明，忘了流程时回来看看就行。
+更完整的网站使用手册在这里：
+
+`	ext
+D:\Acodes\dapengblog2.0\myblog\BLOG_GUIDE.md
+` 
+
 
 ## 目录怎么用
 
@@ -307,4 +313,5 @@ git push
 ```
 
 然后等 GitHub Actions 跑完，网站就会更新。
+
 
