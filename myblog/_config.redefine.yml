@@ -132,7 +132,7 @@ home_banner:
   style: fixed # static or fixed
   # Home banner image
   image: 
-    light: /images/wallhaven-wqery6-light.webp # light mode
+    light: /images/b.jpg # light mode
     dark: /images/wallhaven-wqery6-dark.webp # dark mode
   # Home banner title
   title: DapengKernel
@@ -337,14 +337,14 @@ articles:
 # Docs: https://redefine-docs.ohevan.com/posts/comment
 comment:
   # Whether to enable comment
-  enable: false
+  enable: true
   # Comment system
   system: waline # waline, gitalk, twikoo, giscus, utterances, artalk
   # System configuration
   config:
     # Waline comment system. See https://waline.js.org/
     waline:
-      serverUrl: https://example.example.com # Waline server URL. e.g. https://example.example.com
+      serverUrl: https://comment.dapengblog.com:8443 # Requires DNS and HTTPS activation; see WALINE-SERVER.md
       lang: zh-CN # Waline language. e.g. zh-CN, en-US. See https://waline.js.org/guide/client/i18n.html
       emoji: [] # Waline emojis, see https://waline.js.org/guide/features/emoji.html
       recaptchaV3Key: # Google reCAPTCHA v3 key. See https://waline.js.org/reference/client/props.html#recaptchav3key
@@ -394,7 +394,7 @@ comment:
 # Docs: https://redefine-docs.ohevan.com/footer
 footer:
   # Show website running time
-  runtime: false # 建站日期尚未确认，关闭计时
+  runtime: true # 建站日期尚未确认，关闭计时
   # Icon in footer, write fontawesome icon code here
   icon: '<span aria-hidden="true">·</span>'
   # The start time of the website, format: YYYY/MM/DD HH:mm:ss

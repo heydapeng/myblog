@@ -1,0 +1,3 @@
+deploy-dapengblog-public.tar.gz
+node_modules/
+.deploy-key*
