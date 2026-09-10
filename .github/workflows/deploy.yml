@@ -1,0 +1,81 @@
+name: Deploy Blog
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-blog
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: myblog
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: myblog/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate site
+        run: npx hexo clean && npx hexo generate
+
+      - name: Pack site
+        run: tar -czf dapengblog-public.tar.gz -C public .
+
+      - name: Prepare SSH
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p "${SSH_PORT:-22}" "$SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Upload site
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          set -euo pipefail
+          scp -i ~/.ssh/deploy_key -P "${SSH_PORT:-22}" dapengblog-public.tar.gz "${SSH_USER}@${SSH_HOST}:/tmp/dapengblog-public.tar.gz"
+
+      - name: Publish site
+        env:
+          SSH_HOST: ${{ secrets.DEPLOY_HOST }}
+          SSH_USER: ${{ secrets.DEPLOY_USER }}
+          SSH_PORT: ${{ secrets.DEPLOY_PORT }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/deploy_key -p "${SSH_PORT:-22}" "${SSH_USER}@${SSH_HOST}" <<'EOF'
+          set -euo pipefail
+          release="/var/www/dapengblog/releases/$(date -u +%Y%m%dT%H%M%SZ)"
+          mkdir -p "$release" /var/www/dapengblog/releases
+          tar -xzf /tmp/dapengblog-public.tar.gz -C "$release"
+          chown -R www-data:www-data /var/www/dapengblog
+          ln -sfn "$release" /var/www/dapengblog/current
+          nginx -t
+          systemctl reload nginx
+          find /var/www/dapengblog/releases -mindepth 1 -maxdepth 1 -type d | sort | head -n -5 | xargs -r rm -rf
+          curl -fsSI -H "Host: dapengblog.com" --max-time 10 http://127.0.0.1/ >/dev/null
+          EOF
